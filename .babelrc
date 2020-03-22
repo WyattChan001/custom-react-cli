@@ -1,10 +1,26 @@
 {
-    "presets": ["@babel/preset-env"],
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "modules": false,
+                "targets": {
+                    "browsers": [
+                        "> 1%",
+                        "last 2 versions",
+                        "not ie <= 8"
+                    ]
+                }
+            }
+        ],
+        "@babel/preset-react"
+    ],
     "plugins": [
         [
             "@babel/plugin-transform-runtime",
             {
-                "corejs": 3
+                "corejs": 3,        //@babel/runtime + @babel/plugin-transform-runtime 在 babel7 下只包含 helper function(即 Babel 进行处理时需要的帮助函数), 如果想实现 polyfill , 需要使用@babel/runtime-corejs2。
+                //"useBuiltIns": "usage"      //要实现真正的按需引入,即使用什么新特性打包什么新特性,可以使用实验性的 useBuildIns:"usage"
             }
         ]
     ]

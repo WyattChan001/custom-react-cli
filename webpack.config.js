@@ -50,7 +50,7 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.jsx$/,
+        test: /\.jsx?$/,
         use: ["babel-loader"],
         exclude: /node_modules/
       }
