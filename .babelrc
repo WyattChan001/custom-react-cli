@@ -1,27 +1,34 @@
 {
-    "presets": [
-        [
-            "@babel/preset-env",
-            {
-                "modules": false,
-                "targets": {
-                    "browsers": [
-                        "> 1%",
-                        "last 2 versions",
-                        "not ie <= 8"
-                    ]
-                }
-            }
-        ],
-        "@babel/preset-react"
+  "presets": [
+    //tree shaking 按需加载babel-polifill
+    [
+      "@babel/preset-env",
+      {
+        "modules": false, //关闭将模块打包成commonjs
+        "useBuiltIns": false,
+        "corejs": 3,
+        "targets": {
+          "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+        }
+      }
     ],
-    "plugins": [
-        [
-            "@babel/plugin-transform-runtime",
-            {
-                "corejs": 3,        //@babel/runtime + @babel/plugin-transform-runtime 在 babel7 下只包含 helper function(即 Babel 进行处理时需要的帮助函数), 如果想实现 polyfill , 需要使用@babel/runtime-corejs2。
-                //"useBuiltIns": "usage"      //要实现真正的按需引入,即使用什么新特性打包什么新特性,可以使用实验性的 useBuildIns:"usage"
-            }
-        ]
-    ]
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    //支持import 懒加载
+    "@babel/plugin-syntax-dynamic-import",
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": 3 //@babel/runtime + @babel/plugin-transform-runtime 在 babel7 下只包含 helper function(即 Babel 进行处理时需要的帮助函数), 如果想实现 polyfill , 需要使用@babel/runtime-corejs2。
+        //"useBuiltIns": "usage"      //要实现真正的按需引入,即使用什么新特性打包什么新特性,可以使用实验性的 useBuildIns:"usage"
+      }
+    ],
+    //andt 按需加载  true是less，如果不用less style的值可以写'css'
+    ["import", { "libraryName": "antd", "style": "css" }],
+    //配置对装饰器的支持
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    //识别class组件【支持类属性的插件】
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+  ]
 }

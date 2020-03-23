@@ -15,7 +15,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
       //  html 文件进行压缩
       minify: {
         removeComments: true, //去注释
-        removeAttributeQuotes: true, //去除属性引用
+        // removeAttributeQuotes: false, //去除属性引号
         collapseWhitespace: true //是否折叠空白
       },
       hash: true //是否加上hash，默认是 false
