@@ -23,7 +23,10 @@ module.exports = webpackMerge(baseWebpackConfig, {
         port: '8081',
         publicPath: '/',        //访问资源加前缀
         proxy: {
-
+            '/api': {
+                secure: false,
+                target: 'http://127.0.0.1:8082'
+            }
         }
     }
 })
