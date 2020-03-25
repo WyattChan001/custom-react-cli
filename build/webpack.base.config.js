@@ -1,6 +1,7 @@
 const utils = require("./utils");
 const path = require("path");
 const postcssNormalize = require("postcss-normalize");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: {
@@ -9,6 +10,7 @@ module.exports = {
   output: {
     path: utils.resolve("../dist"),
     filename: "static/js/[name].[hash:8].js",
+    chunkFilename: utils.assetsPath("js/[name].[chunkhash].js"),
     publicPath: "/" //打包后的资源的访问路径前缀
   },
   module: {
@@ -29,12 +31,21 @@ module.exports = {
         test: /\.css$/,
         use: [
           {
-            loader: "style-loader" // 创建 <style></style>
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // esModule: true,
+              hmr: utils.isDev(),
+              reloadAll: true
+            }
           },
+          // {
+          //   loader: "style-loader" // 创建 <style></style>
+          // },
           {
             loader: "css-loader", // 转换css
             options: {
-              modules: false
+              modules: false,
+              // importLoaders: 1
             }
           }
         ]
@@ -42,7 +53,16 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          "style-loader", //动态创建 style 标签，并将 css 插入到 head 中
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // esModule: false,
+              hmr: utils.isDev(),     //开发的时候，修改css热更新，但是试了下不起作用
+              // if hmr does not work, this is a forceful method.
+              reloadAll: true
+            }
+          },
+          // "style-loader", //动态创建 style 标签，并将 css 插入到 head 中
           {
             loader: "css-loader", // 负责处理 @import 等语句
             options: {
@@ -57,7 +77,7 @@ module.exports = {
                   require("autoprefixer")({
                     overrideBrowserslist: [">0.25%", "not dead"]
                   }),
-                  // postcssNormalize()
+                  postcssNormalize()
                 ];
               }
             }
@@ -95,5 +115,11 @@ module.exports = {
     alias: {
       "@": path.join(__dirname, "..", "src") // 在项目中使用@符号代替src路径，导入文件路径更方便
     }
-  }
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].[contenthash:8].css',
+      chunkFilename: utils.assetsPath('css/[id].[chunkhash].css')
+    })
+  ]
 };
