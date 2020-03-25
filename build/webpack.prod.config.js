@@ -3,11 +3,11 @@ const baseWebpackConfig = require("./webpack.base.config");
 const utils = require("./utils");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin"); //每次打包前清空dist目录
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const {BundleAnalyzerPlugin} = require("webpack-bundle-analyzer")
 
 module.exports = webpackMerge(baseWebpackConfig, {
   mode: "production",
   plugins: [
-    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       filename: utils.resolve("./../dist/index.html"), //打包后的文件名
       template: "./public/index.html",
@@ -19,6 +19,8 @@ module.exports = webpackMerge(baseWebpackConfig, {
         collapseWhitespace: true //是否折叠空白
       },
       hash: true //是否加上hash，默认是 false
-    })
+    }),
+    new CleanWebpackPlugin(),
+    new BundleAnalyzerPlugin()
   ]
 });
